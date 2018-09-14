@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="video" class="text-center">
+	<div class="overlay">
+		<div class="container">
+			<div class="section-title center">
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<td>Video</td>
+							<td>Miniatura</td>
+							<td>Descripcion</td>
+							<td>Mostrar</td>
+							<td>Inicio Slide</td>
+						</tr>
+						
+					</thead>
+					<tbody>
+						{% if object_list %}
+						{% for solicitud in object_list %}
+						<tr>
+							<td>{{ solicitud.id }}</td>
+							<td>{{ solicitud.persona.nombre }} {{solicitud.persona.apellidos}}</td>
+							<td>{{ solicitud.numero_mascotas }}</td>
+							<td>{{ solicitud.razones }}</td>
+							
+							<td>
+								<a class="btn btn-primary" href="#">Editar</a>
+								<a class="btn btn-danger" href="#">Eliminar</a>
+							</td>
+						</tr>
+						{% endfor %}
+						
+						{% else %}
+						<h1>No hay registros de Conferencias</h1>
+						{% endif %}
+					</tbody>
+				</table> 
+			</div>
+		</div>
+	</div>	
+</div>
+
+{% endblock %}

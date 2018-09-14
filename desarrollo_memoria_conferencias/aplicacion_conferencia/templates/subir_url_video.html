@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="video" class="text-center">
+	<div class="overlay">
+		<div class="container">
+			<div class="section-title center">
+				<form action="" method="post" enctype="multipart/form-data">
+					{% csrf_token %}
+					{{form_url.as_p}}
+					{{formsub.as_p}}
+					<input type="submit" value="Agregar">
+				</form>	
+			</div>
+		</div>
+	</div>	
+</div>
+
+
+
+
+{% endblock %}

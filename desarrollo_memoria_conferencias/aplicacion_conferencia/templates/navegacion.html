@@ -1,0 +1,33 @@
+{% load staticfiles %}
+{% load i18n %}
+<nav  id="menu" class="navbar navbar-default navbar-fixed-top">
+	<div class="container">
+	<!-- boton para pantallas de celular  -->
+		<div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a id="text-barmenu" class="navbar-brand" href="/">Conferencias USerena Digital</a>
+        </div>
+	<!-- contenido de la barra de navegacion -->
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav" role="menu tablist">
+				<li><a href="/" class="page-scroll">Primero</a></li>
+				<li><a href="/presentacion" class="page-scroll">Segundo</a></li>
+				<li><a href="/url_video" class="page-scroll">Tercero</a></li>
+			</ul>
+			{% if user.is_authenticated %}
+			<ul class="nav navbar-nav navbar-right">
+				{% trans "Logged in" %}: {{ user.username }} 
+				(<a href="{% url 'auth_logout' %}">{% trans "Log out" %}</a> | 
+				<a href="{% url 'auth_password_change' %}">{% trans "Change password" %}</a>)
+			{% else %}
+				<a href="{% url 'auth_login' %}">{% trans "Log in" %}</a>
+			</ul>
+			{% endif %}
+		</div>	
+	</div>
+</nav>
