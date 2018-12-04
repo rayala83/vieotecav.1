@@ -1,9 +1,10 @@
 from django import forms
-from app.videos_de_conferencias.models import Video, url_video
-from app.presentacion_de_conferencias.models import Diapositiva
+from app.videos_de_conferencias.models import Video
+from app.presentacion_de_conferencias.models import Diapositiva, imagen_ppt
+from app.conferencias_campusd.models import Conferencia
 
 
-class UploadForm(forms.ModelForm):
+class DiapositivaForm(forms.ModelForm):
 
 	class Meta:
 		model = Diapositiva
@@ -28,7 +29,7 @@ class UploadForm(forms.ModelForm):
 		
 class formVideo(forms.ModelForm):
 	class Meta:
-		model = url_video
+		model = Video
 		
 		fields = [
 				'url_video',		
@@ -39,3 +40,11 @@ class formVideo(forms.ModelForm):
 		widget = {
 				'url_video'  : forms.TextInput(attrs={'class':'form-control'}), 
 		}
+		
+class FileFieldForm(forms.Form):
+    file_field = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))		
+
+
+
+class ConferenciaForm(forms.Form):
+	ppt = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
