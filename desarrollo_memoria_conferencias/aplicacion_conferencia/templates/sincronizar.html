@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% load staticfiles %} 
+
+{% block content %}
+
+<div id="video" class="text-center">
+	<div class="overlay">
+		<div class="container">
+			<div class="section-title center">
+				<form action="" method="post" enctype="multipart/form-data">
+					{% csrf_token %}
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<td>Video</td>
+								<td>Miniatura</td>
+								<td>Titulo</td>
+								<td>Inicio</td>
+								<td>Fin</td>
+							</tr>
+							
+						</thead>
+						<tbody>
+							{% if ppt %}
+							{% for solicitud in ppt %}
+							<tr>
+								<td rowspan="29"><iframe src="https://www.youtube.com/embed/{{ solicitud.id_video.url_video}}?rel=0&amp;autoplay=1" frameborder="0" width="450" height="250" allowfullscreen></iframe>	
+								<!-- <input type="submit" class="btn btn-primary" name="submit" value="Guardar"> -->
+								<a class="btn btn-primary" href="/presentacion/{{solicitud.id_video.id}}">Ver</a>
+								</td>
+								
+								{% for foto in slide %}	
+									<tr>
+										<td><img src="{{ foto.imagen.url }}" width="200" alt="imagen" /></td>
+										<td>{{ solicitud.titulo }}</td>
+										<td><input type="time" value="00:03:12" min="0" max="{{ foto.inicio }}"></td>
+										<td><input type="time" value="00:10:20" min="0" max="{{ foto.fin }}"></td>											
+									<tr>	
+								{% endfor %}	
+
+
+							</tr>
+							{% endfor %}
+							
+							{% else %}
+							<h1>No hay registros de Conferencias</h1>
+							{% endif %}
+						</tbody>
+					</table> 
+				</form>	
+			</div>
+		</div>
+	</div>	
+</div>
+
+{% endblock %}

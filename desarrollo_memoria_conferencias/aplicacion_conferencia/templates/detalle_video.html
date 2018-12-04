@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% load staticfiles %} 
+
+{% block content %}
+
+<div id="video">
+	<div class="overlay">
+		<div class="container sinpadding">	
+			<a class="btn btn-primary" href="#" onclick="location.replace('/url_video')">Crear Nuevo</a>
+			 {% for video in videos %}
+			 	<div class="row">				 	    
+					<div class="col-md-4">						
+						<img src="{{ video.imagen }}" class="img-responsive" alt="Responsive image" width= "50%" >
+					</div>
+					<div class="col-md-4">
+						<h3 class="titulo">{{video.titulo}}</h3>	
+						<h3 class="duracion">{{video.duracion}}</h3>
+						<p>{% autoescape off %}{{ video.autor}}{% endautoescape %}</p>
+						<p class="fecha">{{ video.fecha|date:"d M, Y" }}</p>
+					</div>	
+					<div class="col-md-4">	
+						<a class="btn btn-primary btn-lg btn-block" href="/sincroniza/{{video.id}}" role="button">Sincroniza</a>
+						<a class="btn btn-primary btn-lg btn-block"  href="/presentacion/{{video.id}}" role="button">Ver</a>
+						<a class="btn btn-primary btn-lg btn-block"  href="#" role="button">Editar</a>							
+					</div>	
+				</div>				
+			{% endfor %}		
+		</div>
+	</div>	
+</div>	
+<div id=controles></div>
+<div id=presentacion></div>
+
+
+
+
+{% endblock %}
