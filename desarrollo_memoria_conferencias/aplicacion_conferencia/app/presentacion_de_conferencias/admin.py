@@ -1,13 +1,13 @@
 from django.contrib import admin
-from app.presentacion_de_conferencias.models import Diapositiva, imagen_ppt
+from app.presentacion_de_conferencias.models import Diapositiva, slides_ppt
 
 class PPTAdmin(admin.ModelAdmin):
-	list_display = ('id','fecha', 'titulo','id_video', 'diapo', 'activo')
+	list_display = ('id','diapo')
 	
 admin.site.register(Diapositiva, PPTAdmin)
 
-class imagenAdmin(admin.ModelAdmin):
-	list_display = ('imagen','id_diapo', 'duracion')
-admin.site.register(imagen_ppt, imagenAdmin)
+class slideAdmin(admin.ModelAdmin):
+	list_display = ('slide','id_diapo', 'duracion')
+admin.site.register(slides_ppt, slideAdmin)
 
 # Register your models here.

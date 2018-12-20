@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% load staticfiles %} 
+
+{% block javascript %}
+	<script>
+		function Calcular(ele){
+
+			var valor1 = 0, valor2 = 0, res = 0;
+			var tr = ele.parentNode.parentNode;
+			var nodes = tr.children;
+			for (var x = 0; x<nodes.length;x++) {
+
+				if (nodes[x].firstChild.name == "valor_1"){
+					valor1 = parseFloat(nodes[x].firstChild.value,10);
+				}	
+				if (nodes[x].firstChild.name == "valor_2"){
+					valor2 = parseFloat(nodes[x].firstChild.value,10);
+				}
+			    if (nodes[x].firstChild.name == 'valor_res') {
+					res = parseFloat((valor1-valor2),10);
+					nodes[x].firstChild.value = res;
+				}
+			}
+			var total = document.getElementById("total");
+			if (total.innerHTML == 'NaN') {
+				total.innerHTML = 0;
+			}
+			total.innerHTML = parseFloat(total.innerHTML)+res;
+
+		}
+
+
+
+	</script>
+{% endblock %}
+
+{% block content %}
+
+
+<div id="video" class="text-center">
+	<div class="overlay">
+		<div id="container">
+			 <div id="sum">
+			 	<input type="text" name="valor_1" size="9" id="valor_1" class="item" value="0" onChange="Calcular(this)";>
+			    <input type="text" name="valor_2" size="9" id="valor_2" class="item" value="0" onChange="Calcular(this)";>
+			    <input type="text" name="valor_res" size="9" id="valor_res" class="res" value="0" readonly="readonly">
+			</div>
+			<div id="sum">
+			 	<input type="text" name="valor_1" size="9" id="valor_1" class="item" value="0" onChange="Calcular(this)";>
+			    <input type="text" name="valor_2" size="9" id="valor_2" class="item" value="0" onChange="Calcular(this)";>
+			    <input type="text" name="valor_res" size="9" id="valor_res" class="res" value="0" readonly="readonly">
+			</div>
+		</div>
+			<div class="sum">
+			    <input type="text" name="total" size="9" id="total" class="total" value="0" readonly="readonly">
+			</div>
+	</div>	
+</div>				
+
+
+{% endblock %}

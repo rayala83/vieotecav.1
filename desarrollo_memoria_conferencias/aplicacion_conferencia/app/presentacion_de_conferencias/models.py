@@ -1,25 +1,21 @@
 from django.db import models
-from datetime import datetime
-from app.videos_de_conferencias.models import Video
+
 
 class Diapositiva(models.Model):
-	fecha = models.DateTimeField(default=datetime.now())
-	titulo = models.CharField(max_length=30)
-	id_video = models.ForeignKey('videos_de_conferencias.Video', on_delete=models.CASCADE,)
-	diapo = models.FileField(upload_to='media/ppt')
-	activo = models.BooleanField(default=True)
-	
-	def __unicode__(self):
-		return self.titulo
+	diapo = models.FileField(upload_to='ppt')
 		
 	class Meta:
-		ordering = ["fecha"]
+		ordering = ["diapo"]
 		verbose_name_plural = "Diapositivas"
 		
-class imagen_ppt(models.Model):
-	imagen = models.ImageField(upload_to='media/fotos')
+class slides_ppt(models.Model):
+	slide = models.ImageField(upload_to='slides')
 	id_diapo = models.ForeignKey(Diapositiva, on_delete=models.CASCADE)
 	duracion = models.CharField(max_length=100)
-	
+
 	def __unicode__(self):
-		return unicode(self.imagen)
+		return self.slide	
+
+	class Meta:
+		ordering = ["slide"]
+		verbose_name_plural = "slides"

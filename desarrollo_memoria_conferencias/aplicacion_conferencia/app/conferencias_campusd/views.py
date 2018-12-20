@@ -6,7 +6,7 @@ from django.views.generic.edit import FormView
 
 from app.conferencias_campusd.forms import  DiapositivaForm, formVideo, FileFieldForm, ConferenciaForm
 
-from app.presentacion_de_conferencias.models import Diapositiva, imagen_ppt
+from app.presentacion_de_conferencias.models import Diapositiva, slides_ppt
 from app.videos_de_conferencias.models import Video
 from app.conferencias_campusd.models import Conferencia
 
@@ -23,35 +23,46 @@ convertapi.api_secret = 'lSaNbAz2Jv9Suib1'
 
 def index(request):
     return render(request, 'index.html')
-	
 
+def intervalos(request):
+    return render(request, 'prueba_resta.html')
 	
-def sinc(request, num):
-    ppt = Diapositiva.objects.filter(id_video=num)
-    if ppt.exists():
-    	slide = imagen_ppt.objects.filter(id_diapo=ppt)
-    	if slide.exists():
-    		return render(request, 'sincronizar.html', {'ppt' :ppt, 'slide': slide})
-    	return render(request, 'sincronizar.html', {'ppt' :ppt, 'slide': slide})
-    return redirect('app.conferencias_campusd.views.index')	
+	
 	
 def guarda_url(request):
 	if request.method == 'POST':
-		form_url = formVideo(request.POST)
-		form_ppt = DiapositivaForm(request.POST, request.FILES)
-		if form_url.is_valid() and form_ppt.is_valid():
-			newVideo = request.POST['url_video']
-	
-			video = pafy.new(newVideo)
-			info_video = Video(url_video = video.videoid, titulo = video.title, autor = video.author, duracion = video.duration, imagen = video.thumb)
-			info_video.save()
+		form_conf = ConferenciaForm(request.POST)
+		form_video = formVideo(request.POST)
+		form_ppt = DiapositivaForm(request.POST,request.FILES)
+
+		print form_conf.is_valid()
+		print form_video.is_valid()
+		print form_ppt.is_valid()
+
+		if form_conf.is_valid() and form_video.is_valid() and form_ppt.is_valid():
 			
-			conferencia_nueva = form_ppt.save(commit=False)
-			conferencia_nueva.id_video = info_video
+			
+
+			newVideo = request.POST['url_video']
+			video = pafy.new(newVideo)
+			info_video = Video(url_video = video.videoid, duracion = video.duration, imagen = video.thumb)
+			info_video.save()
+
+
+			presentacion = Diapositiva(diapo =request.FILES['diapo'])
+			presentacion.save()
+
+			conferencia_nueva = form_conf.save(commit=False)
+			conferencia_nueva.video = info_video
+			conferencia_nueva = form_conf.save(commit=False)
+			conferencia_nueva.ppt = presentacion
 			conferencia_nueva.save()
 
-			nombre = (conferencia_nueva.diapo).name
+			nombre = (conferencia_nueva.ppt.diapo).name
 			print nombre
+
+			duracion = conferencia_nueva.video.duracion
+			print duracion
 			
 			result = convertapi.convert('jpg', {'File': '/vagrant/aplicacion_conferencia/media/' + nombre}, from_format = 'pptx').save_files(tempfile.gettempdir())
 			print("The JPG saved to %s" % result)
@@ -59,19 +70,20 @@ def guarda_url(request):
 
 			for f in result:
 				foto = ImageFile(open(f))
-				galeria = imagen_ppt(imagen = foto, id_diapo = conferencia_nueva, duracion = info_video.duracion)
+				galeria = slides_ppt(slide = foto, id_diapo = conferencia_nueva.ppt, duracion = duracion)
 				galeria.save()	
 				print foto
 		
 
 			
-		return redirect('/')
+		return redirect('/video')
 	else:
-		form_url = formVideo()
+		form_conf = ConferenciaForm()
+		form_video = formVideo()
 		form_ppt = DiapositivaForm()
-	return render(request, 'subir_url_video.html', {'form_url':form_url, 'form_ppt': form_ppt})	
+	return render(request, 'subir_url_video.html', {'form_conf': form_conf,'form_video':form_video, 'form_ppt': form_ppt})	
 	
-	
+
 	
 class FileFieldView(FormView):
     form_class = FileFieldForm
@@ -86,7 +98,7 @@ class FileFieldView(FormView):
 		print("The JPG saved to %s" % files)
 		if form.is_valid():
 		    for f in files:
-		    	galeria = imagen_ppt(imagen = f, id_diapo = ppt_nueva, inicio = ppt_nueva.url.duracion, fin = ppt_nueva.url.duracion)
+		    	galeria = slides_ppt(imagen = f, id_diapo = ppt_nueva, inicio = ppt_nueva.url.duracion, fin = ppt_nueva.url.duracion)
 		    	galeria.save()	
 		    return self.form_valid(form)
 		else:

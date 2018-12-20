@@ -8,7 +8,8 @@
 			<div class="section-title center">
 				<form action="" method="post" enctype="multipart/form-data">
 					{% csrf_token %}
-					{{form_url.as_p}}
+					{{form_conf.as_p}}
+					{{form_video.as_p}}
 					{{form_ppt.as_p}}
 					<input type="submit" value="Agregar">
 				</form>	

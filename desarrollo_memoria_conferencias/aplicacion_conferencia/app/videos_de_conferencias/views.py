@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from app.videos_de_conferencias.models import Video
+from app.conferencias_campusd.models import Conferencia
 
 def video(request):	
-	videos = Video.objects.all()
-	return render(request, 'detalle_video.html', {'videos':	videos})
+	conferencias = Conferencia.objects.all()
+	return render(request, 'detalle_video.html', {'conferencia' :conferencias})

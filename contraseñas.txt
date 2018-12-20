@@ -1,4 +1,6 @@
-usuario : usercampus
+
+nuevo usuario admin
+usuario : ubuntuvirtual
 pass : campus@userena
 
 

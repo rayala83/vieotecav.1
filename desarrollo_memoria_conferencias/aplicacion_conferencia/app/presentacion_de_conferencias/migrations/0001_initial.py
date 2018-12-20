@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-import datetime
 
 
 class Migration(migrations.Migration):
@@ -15,14 +14,20 @@ class Migration(migrations.Migration):
             name='Diapositiva',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('fecha', models.DateTimeField(default=datetime.datetime(2018, 8, 13, 12, 9, 28, 299928))),
-                ('titulo', models.CharField(max_length=30)),
-                ('diapo', models.CharField(max_length=100)),
-                ('activo', models.BooleanField(default=True)),
+                ('diapo', models.FileField(upload_to=b'ppt')),
             ],
             options={
-                'ordering': ['fecha'],
+                'ordering': ['diapo'],
                 'verbose_name_plural': 'Diapositivas',
             },
+        ),
+        migrations.CreateModel(
+            name='slides_ppt',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('slide', models.ImageField(upload_to=b'slides')),
+                ('duracion', models.CharField(max_length=100)),
+                ('id_diapo', models.ForeignKey(to='presentacion_de_conferencias.Diapositiva')),
+            ],
         ),
     ]

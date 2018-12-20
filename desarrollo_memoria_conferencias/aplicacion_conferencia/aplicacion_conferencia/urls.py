@@ -23,13 +23,14 @@ admin.autodiscover()
 
 urlpatterns = [
 	url(r'^$', 'app.conferencias_campusd.views.index'),
-	url(r'^sincroniza/(\d+)/$', 'app.conferencias_campusd.views.sinc'),
+	url(r'^sincroniza/(\d+)/$', 'app.presentacion_de_conferencias.views.sinc'),
 	url(r'^video/$', 'app.videos_de_conferencias.views.video'),
 	url(r'^presentacion/(\d+)/$', 'app.presentacion_de_conferencias.views.presentacion'),
 	url(r'^subir_ppt/$', views.subir_archivo.as_view(), name='form'),
 	url(r'^url_video/$', 'app.conferencias_campusd.views.guarda_url'),
 	url(r'^archivo/$', views.FileFieldView.as_view(), name='form'),
 	url(r'^accounts/', include('registration.backends.default.urls')),
+	url(r'^intervalo$', 'app.conferencias_campusd.views.intervalos'),
 	url(r'^admin/', include(admin.site.urls)),	
 	]
 

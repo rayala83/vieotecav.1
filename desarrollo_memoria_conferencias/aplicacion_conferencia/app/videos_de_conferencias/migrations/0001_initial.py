@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-import datetime
 
 
 class Migration(migrations.Migration):
@@ -15,13 +14,12 @@ class Migration(migrations.Migration):
             name='Video',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('fecha', models.DateTimeField(default=datetime.datetime(2018, 8, 13, 12, 9, 28, 203232))),
-                ('titulo', models.CharField(max_length=30)),
-                ('video', models.CharField(max_length=100)),
-                ('activo', models.BooleanField(default=True)),
+                ('url_video', models.URLField(max_length=150)),
+                ('duracion', models.CharField(max_length=100)),
+                ('imagen', models.ImageField(upload_to=b'img_youtube')),
             ],
             options={
-                'ordering': ['fecha'],
+                'ordering': ['url_video'],
                 'verbose_name_plural': 'Videos',
             },
         ),
