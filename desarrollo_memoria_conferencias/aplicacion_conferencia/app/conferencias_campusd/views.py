@@ -17,6 +17,10 @@ import tempfile
 
 from django.core.files.images import ImageFile
 
+from lxml import etree
+
+
+
 convertapi.api_secret = 'lSaNbAz2Jv9Suib1'
 
 
@@ -25,7 +29,7 @@ def index(request):
     return render(request, 'index.html')
 
 def intervalos(request):
-    return render(request, 'prueba_resta.html')
+   return render(request, 'prueba_resta.html')
 	
 	
 	
@@ -49,7 +53,7 @@ def guarda_url(request):
 			info_video.save()
 
 
-			presentacion = Diapositiva(diapo =request.FILES['diapo'])
+			presentacion = Diapositiva(diapo =request.FILES['diapo'], xml =request.FILES['xml'])
 			presentacion.save()
 
 			conferencia_nueva = form_conf.save(commit=False)
@@ -61,18 +65,29 @@ def guarda_url(request):
 			nombre = (conferencia_nueva.ppt.diapo).name
 			print nombre
 
-			duracion = conferencia_nueva.video.duracion
+			duracion = (conferencia_nueva.ppt.xml).name
 			print duracion
-			
+
+			doc = etree.parse('/vagrant/aplicacion_conferencia/media/' + duracion)
+			raiz=doc.getroot()
+
 			result = convertapi.convert('jpg', {'File': '/vagrant/aplicacion_conferencia/media/' + nombre}, from_format = 'pptx').save_files(tempfile.gettempdir())
 			print("The JPG saved to %s" % result)
 
-
+			
 			for f in result:
 				foto = ImageFile(open(f))
-				galeria = slides_ppt(slide = foto, id_diapo = conferencia_nueva.ppt, duracion = duracion)
+				galeria = slides_ppt(slide = foto, id_diapo = presentacion, duracion = 0)
 				galeria.save()	
 				print foto
+
+
+			for contenido in raiz.findall("{http://schemas.microsoft.com/office/2006/xmlPackage}part/[@{http://schemas.microsoft.com/office/2006/xmlPackage}contentType= 'application/vnd.openxmlformats-officedocument.presentationml.slide+xml']"):
+				for minutos in contenido.findall("{http://schemas.microsoft.com/office/2006/xmlPackage}xmlData/{http://schemas.openxmlformats.org/presentationml/2006/main}sld/{http://schemas.openxmlformats.org/markup-compatibility/2006}AlternateContent/{http://schemas.openxmlformats.org/markup-compatibility/2006}Fallback/{http://schemas.openxmlformats.org/presentationml/2006/main}transition"):
+					tiempo = minutos.get('advTm')
+					galeria = slides_ppt(duracion = tiempo)
+					galeria.save()
+					print tiempo	
 		
 
 			

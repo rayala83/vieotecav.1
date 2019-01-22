@@ -10,24 +10,27 @@
 			var valor1 = 0, valor2 = 0, res = 0;
 			var tr = ele.parentNode.parentNode;
 			var nodes = tr.children;
-			for (var x = 0; x<nodes.length;x++) {
-
-				if (nodes[x].firstChild.name == "valor_1"){
-					valor1 = parseFloat(nodes[x].firstChild.value,10);
-				}	
-				if (nodes[x].firstChild.name == "valor_2"){
-					valor2 = parseFloat(nodes[x].firstChild.value,10);
-				}
-			    if (nodes[x].firstChild.name == 'valor_res') {
-					res = parseFloat((valor2-valor1),10);
-					nodes[x].firstChild.value = res;
-				}
-			}
 			var total = document.getElementById("total");
+
 			if (total.innerHTML == 'NaN') {
 				total.innerHTML = 0;
 			}
-			total.innerHTML = parseFloat(total.innerHTML)+res;
+			for (var x = 0; x<nodes.length;x++) {
+
+				if (nodes[x].firstChild.name == "valor_1"){
+					valor1 = nodes[x].firstChild.valueAsDate;
+				}	
+				if (nodes[x].firstChild.name == "valor_2"){
+					valor2 = nodes[x].firstChild.valueAsDate;
+				}
+			    if (nodes[x].firstChild.name == 'valor_res') {
+			    	anterior = nodes[x].firstChild.valueAsDate;
+					res = (valor2.getTime()-valor1.getTime());
+					nodes[x].firstChild.value = res;
+				}
+			}
+
+			total.innerHTML = parseFloat(total.innerHTML)+res -anterior;
 
 		}	
 
@@ -59,9 +62,9 @@
 							{% if conf %}
 								{% for video in conf %}
 								<tr>
-									<td rowspan="{{ video|length }}"><iframe src="https://www.youtube.com/embed/{{ video.video.url_video}}?rel=0&amp;autoplay=1" frameborder="0" width="450" height="250" allowfullscreen></iframe>	
-									<a class="btn btn-primary" align="center" href="#">Vista Previa</a>	
-									<input type="text" name="total" size="9" id="total" class="total" value="0" readonly="readonly">				
+									<td rowspan="{{ video|length }}"><iframe class="youtube-player" type="text/html" width="450" height="250"  src="https://www.youtube.com/embed/{{ video.video.url_video}}" frameborder="0"></iframe>
+									<a class="btn btn-primary" align="center" href="/conferencia/{{video.ppt.id}}">Vista Previa</a>	
+									<span id="total">0</span>			
 									</td>
 									
 								</tr>
@@ -70,9 +73,9 @@
 								{% for foto in slide %}	
 									<tr>
 										<td><img src="{{ foto.slide.url }}" width="200" alt="imagen" /></td>						
-										<td><input type="text" name="valor_1" size="9" id="valor_1" class="item" value="0" onChange="Calcular(this);"></td>
-										<td><input type="text" name="valor_2" size="9" id="valor_2" class="item" value="0" onChange="Calcular(this);"></td>	
-										<td><input  <input type="text" name="valor_res" size="9" id="valor_res" class="res" value="{{ foto.duracion }}" readonly="readonly"></td>									
+										<td><input type="time" name="valor_1" size="9" id="valor_1" class="item" value="0" onChange="Calcular(this);"></td>
+										<td><input type="time" name="valor_2" size="9" id="valor_2" class="item" value="0" onChange="Calcular(this);"></td>	
+										<td><input type="time" name="valor_res" size="9" id="valor_res" class="res" value="{{ foto.duracion }}"></td>									
 									<tr>	
 								{% endfor %}								
 							

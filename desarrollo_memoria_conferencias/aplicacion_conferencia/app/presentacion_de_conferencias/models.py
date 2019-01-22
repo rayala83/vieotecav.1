@@ -3,6 +3,10 @@ from django.db import models
 
 class Diapositiva(models.Model):
 	diapo = models.FileField(upload_to='ppt')
+	xml = models.FileField(upload_to='xml')
+
+	def __unicode__(self):
+		return '{}'.format(self.diapo)
 		
 	class Meta:
 		ordering = ["diapo"]
@@ -14,7 +18,7 @@ class slides_ppt(models.Model):
 	duracion = models.CharField(max_length=100)
 
 	def __unicode__(self):
-		return self.slide	
+		return self.slide.name	
 
 	class Meta:
 		ordering = ["slide"]

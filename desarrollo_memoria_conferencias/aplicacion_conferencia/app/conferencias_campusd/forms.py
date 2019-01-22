@@ -10,10 +10,12 @@ class DiapositivaForm(forms.ModelForm):
 		model = Diapositiva
 		
 		fields = [
-				'diapo',	
+				'diapo',
+				'xml',
 		]
 		labels = {
 				'diapo'  : 'Selecciona un archivo',
+				'xml'	 :  'Seleccione un archivo'	
 		}
 		
 class formVideo(forms.ModelForm):

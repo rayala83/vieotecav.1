@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% load staticfiles %} 
+
+
+{% block content %}
+
+<div id="presentacion">
+	<div class="panel1">
+		{% for video in conf %}
+			<div class="caption">
+				<iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video.video.url_video}}?autoplay=0&showinfo=0&controls=0;wmode=transparent" id="player_{{ video.video.url_video}}" onmouseover="play_video('player_{{ video.video.url_video}}')" onmouseout="stop_video('player_{{ video.video.url_video}}')" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+			</div>	
+		{% endfor %}	
+	</div>
+	<div class="panel2">		
+		<div class="caption">			
+			<div class="fotorama" data-autoplay="true" data-width="660"  data-height="350" >
+				{% for imagen in slide %}	
+  					<img src="{{ imagen.slide.url }}" frameborder="0" width="360" height="115" >
+  				{% endfor %}	
+			</div>				
+		</div>	
+	</div>
+</div>
+
+{% endblock %}
