@@ -77,7 +77,9 @@ def guarda_url(request):
 			tiempos = []
 			for contenido in raiz.findall("{http://schemas.microsoft.com/office/2006/xmlPackage}part/[@{http://schemas.microsoft.com/office/2006/xmlPackage}contentType= 'application/vnd.openxmlformats-officedocument.presentationml.slide+xml']"):
 				for minutos in contenido.findall("{http://schemas.microsoft.com/office/2006/xmlPackage}xmlData/{http://schemas.openxmlformats.org/presentationml/2006/main}sld/{http://schemas.openxmlformats.org/markup-compatibility/2006}AlternateContent/{http://schemas.openxmlformats.org/markup-compatibility/2006}Fallback/{http://schemas.openxmlformats.org/presentationml/2006/main}transition"):
-					tiempos.append(minutos.get('advTm'))
+					tiempo = minutos.get('advTm')
+					segundos = float(tiempo)/1000
+					tiempos.append(segundos)
 				#slides_ppt.objects.filter(id_diapo=presentacion.id).update(duracion=tiempos[i])
 		
 			i = 0
