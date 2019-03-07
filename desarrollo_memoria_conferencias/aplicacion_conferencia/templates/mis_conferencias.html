@@ -2,25 +2,97 @@
 
 {% load staticfiles %} 
 
+{% block javascript %}
+<script >
+
+	      // 2. This code loads the IFrame Player API code asynchronously.
+      var tag = document.createElement('script');
+
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+      // 3. This function creates an <iframe> (and YouTube player)
+      //    after the API code downloads.
+      var player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+      }
+
+      // 4. The API will call this function when the video player is ready.
+      function onPlayerReady(event) {
+        event.target.playVideo();
+      }
+
+      // 5. The API calls this function when the player's state changes.
+      //    The function indicates that when playing a video (state=1),
+      //    the player should play for six seconds and then stop.
+      var done = false;
+      function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.PLAYING && !done) {
+          setTimeout(stopVideo, 6000);
+          done = true;
+        }
+      }
+      function stopVideo() {
+        player.stopVideo();
+      }
+
+      function ChangeCP(newtime) {
+      player.seekTo(newtime);
+      }
+
+
+</script>
+
+{% endblock %}
 
 {% block content %}
 
-<div id="presentacion">
-	<div class="panel1">
+<div id="presentacion" class="window">
+	<div id="panel1" class="window">
 		{% for video in conf %}
-			<div class="caption">
-				<iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video.video.url_video}}?autoplay=0&showinfo=0&controls=0;wmode=transparent" id="player_{{ video.video.url_video}}" onmouseover="play_video('player_{{ video.video.url_video}}')" onmouseout="stop_video('player_{{ video.video.url_video}}')" frameborder="0" allow="autoplay; encrypted-media"></iframe>
-			</div>	
+			<iframe id="player" type="text/html" width="480" height="360" 
+			src="http://www.youtube.com/embed/{{ video.url_video}}?enablejsapi=1" 
+			frameborder="0"></iframe>
 		{% endfor %}	
 	</div>
-	<div class="panel2">		
-		<div class="caption">			
-			<div class="fotorama" data-autoplay="true" data-width="660"  data-height="350" >
-				{% for imagen in slide %}	
-  					<img src="{{ imagen.slide.url }}" frameborder="0" width="360" height="115" >
-  				{% endfor %}	
-			</div>				
-		</div>	
+
+  <div id="middlearea" class="window">
+  </div>
+
+	<div id="panel2" class="window">		
+		<div class="fotorama" data-autoplay="true" data-width="660"  data-height="350" >
+			{% for imagen in slide %}	
+					<img src="{{ imagen.slide.url }}" frameborder="0" width="360" height="115" >
+				{% endfor %}	
+		</div>				
+	</div>
+
+  <div id="panel3">
+    {% for imagen in slide %} 
+      <ol>
+        <li><a href='javascript: ChangeCP("{{imagen.duracion}}")'>{{imagen.duracion}}<a></li>
+      </ol>    
+    {% endfor %}
+  </div> 
+
+
+</div>
+<div id="zenContainerForMiddleMenu">
+
+	<div id="middlemenu" class="window">
+	<center><a href="javascript:showOutline();" title="More options">
+		<img border=0 src="{% static 'imagenes/more.png' %}"></a><br><br>
+		<img border=0 id="sizebutton" title="Drag and size" src="{% static 'imagenes/size.png' %}"></center>
+	</div>
+
+	<div id="zenContainerForMiddleMenuDragging">
 	</div>
 </div>
 

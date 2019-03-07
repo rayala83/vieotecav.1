@@ -5,7 +5,7 @@ from app.conferencias_campusd.models import Conferencia, Categoria, Tags, Sincro
 
 
 class ConferenciaAdmin(admin.ModelAdmin):
-	list_display = ('fecha', 'video', 'ppt', 'titulo', 'autor', 'categoria')
+	list_display = ('fecha', 'titulo', 'autor', 'categoria')
 
 admin.site.register(Conferencia,ConferenciaAdmin)
 
@@ -19,6 +19,6 @@ admin.site.register(Tags)
 admin.site.register(Sincronizacion)
 
 class intervaloAdmin(admin.ModelAdmin):
-	list_display = ('id_sinc', 'id_slide_ppt', 'acomulado', 'fin')
+	list_display = ('id_sinc', 'inicio', 'fin')
 
 admin.site.register(intervalo, intervaloAdmin)

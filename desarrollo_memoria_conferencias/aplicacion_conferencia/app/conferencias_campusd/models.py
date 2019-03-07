@@ -3,8 +3,6 @@ from django.db import models
 # Create your models here.
 
 from datetime import datetime
-from app.videos_de_conferencias.models import Video
-from app.presentacion_de_conferencias.models import Diapositiva, slides_ppt
 
 
 class Categoria(models.Model):
@@ -31,9 +29,7 @@ class Tags(models.Model):
 
 
 class Conferencia(models.Model):	
-	fecha = models.DateTimeField(default=datetime.now())	
-	video = models.ForeignKey('videos_de_conferencias.Video', on_delete=models.CASCADE)
-	ppt = models.ForeignKey('presentacion_de_conferencias.Diapositiva', on_delete=models.CASCADE)
+	fecha = models.DateTimeField(default=datetime.now())
 	titulo = models.CharField(max_length=30)
 	autor = models.CharField(max_length = 50)
 	descripcion = models.CharField(max_length=500)
@@ -64,13 +60,11 @@ class Sincronizacion(models.Model):
 
 class intervalo(models.Model):
 	id_sinc = models.ForeignKey(Sincronizacion, on_delete=models.CASCADE)
-	id_slide_ppt = models.ForeignKey('presentacion_de_conferencias.slides_ppt', on_delete=models.CASCADE)
-	acomulado = models.CharField(max_length=100)
+	inicio = models.CharField(max_length=100)
 	fin = models.CharField(max_length=100)
 
 	def __unicode__(self):
 		return self.id_sinc
 
 	class Meta:
-		ordering = ["id_slide_ppt"]
 		verbose_name_plural = "Intervalos"

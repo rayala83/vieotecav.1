@@ -29,7 +29,9 @@ def index(request):
     return render(request, 'index.html')
 
 def intervalos(request):
-   return render(request, 'prueba_resta.html')
+	conferencias = slides_ppt.objects.all()
+	return render(request, 'prueba_resta.html', {'conferencia' :conferencias})
+	#return render(request, 'prueba_resta.html')
 	
 	
 	
@@ -45,27 +47,24 @@ def guarda_url(request):
 
 		if form_conf.is_valid() and form_video.is_valid() and form_ppt.is_valid():
 			
-			
+			conferencia_nueva = form_conf.save()
+
 
 			newVideo = request.POST['url_video']
 			video = pafy.new(newVideo)
-			info_video = Video(url_video = video.videoid, duracion = video.duration, imagen = video.thumb)
+			info_video = Video(url_video = video.videoid, duracion = video.duration, imagen = video.thumb, conferencia = conferencia_nueva)
 			info_video.save()
 
 
 			presentacion = Diapositiva(diapo =request.FILES['diapo'], xml =request.FILES['xml'])
+			presentacion = form_ppt.save(commit=False)
+			presentacion.conferencia = conferencia_nueva
 			presentacion.save()
 
-			conferencia_nueva = form_conf.save(commit=False)
-			conferencia_nueva.video = info_video
-			conferencia_nueva = form_conf.save(commit=False)
-			conferencia_nueva.ppt = presentacion
-			conferencia_nueva.save()
-
-			nombre = (conferencia_nueva.ppt.diapo).name
+			nombre = (presentacion.diapo).name
 			print nombre
 
-			duracion = (conferencia_nueva.ppt.xml).name
+			duracion = (presentacion.xml).name
 			print duracion
 
 			doc = etree.parse('/vagrant/aplicacion_conferencia/media/' + duracion)
@@ -74,21 +73,24 @@ def guarda_url(request):
 			result = convertapi.convert('jpg', {'File': '/vagrant/aplicacion_conferencia/media/' + nombre}, from_format = 'pptx').save_files(tempfile.gettempdir())
 			print("The JPG saved to %s" % result)
 
-			
+			# Obtenemos los tiempos de todas las slides
+			tiempos = []
+			for contenido in raiz.findall("{http://schemas.microsoft.com/office/2006/xmlPackage}part/[@{http://schemas.microsoft.com/office/2006/xmlPackage}contentType= 'application/vnd.openxmlformats-officedocument.presentationml.slide+xml']"):
+				for minutos in contenido.findall("{http://schemas.microsoft.com/office/2006/xmlPackage}xmlData/{http://schemas.openxmlformats.org/presentationml/2006/main}sld/{http://schemas.openxmlformats.org/markup-compatibility/2006}AlternateContent/{http://schemas.openxmlformats.org/markup-compatibility/2006}Fallback/{http://schemas.openxmlformats.org/presentationml/2006/main}transition"):
+					tiempos.append(minutos.get('advTm'))
+				#slides_ppt.objects.filter(id_diapo=presentacion.id).update(duracion=tiempos[i])
+		
+			i = 0
 			for f in result:
 				foto = ImageFile(open(f))
-				galeria = slides_ppt(slide = foto, id_diapo = presentacion, duracion = 0)
+				galeria = slides_ppt(slide = foto, id_diapo = presentacion, duracion = tiempos[i])
 				galeria.save()	
+				print tiempos[i]
+				i = i + 1
 				print foto
 
 
-			for contenido in raiz.findall("{http://schemas.microsoft.com/office/2006/xmlPackage}part/[@{http://schemas.microsoft.com/office/2006/xmlPackage}contentType= 'application/vnd.openxmlformats-officedocument.presentationml.slide+xml']"):
-				for minutos in contenido.findall("{http://schemas.microsoft.com/office/2006/xmlPackage}xmlData/{http://schemas.openxmlformats.org/presentationml/2006/main}sld/{http://schemas.openxmlformats.org/markup-compatibility/2006}AlternateContent/{http://schemas.openxmlformats.org/markup-compatibility/2006}Fallback/{http://schemas.openxmlformats.org/presentationml/2006/main}transition"):
-					tiempo = minutos.get('advTm')
-					galeria = slides_ppt(duracion = tiempo)
-					galeria.save()
-					print tiempo	
-		
+			
 
 			
 		return redirect('/video')

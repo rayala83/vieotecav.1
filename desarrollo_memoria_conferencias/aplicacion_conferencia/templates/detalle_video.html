@@ -20,17 +20,15 @@
 						<p class="fecha">{{ conf.fecha|date:"d M, Y" }}</p>
 					</div>	
 					<div class="col-md-4">	
-						<a class="btn btn-primary btn-lg btn-block" href="/sincroniza/{{conf.ppt.id}}" role="button">Sincroniza</a>
-						<a class="btn btn-primary btn-lg btn-block"  href="/conferencia/{{conf.ppt.id}}" role="button">Ver</a>
+						<a class="btn btn-primary btn-lg btn-block" href="/sincroniza/{{conf.id}}" role="button">Sincroniza</a>
+						<a class="btn btn-primary btn-lg btn-block"  href="/conferencia/{{conf.id}}" role="button">Ver</a>
 						<a class="btn btn-primary btn-lg btn-block"  href="#" role="button">Editar</a>							
 					</div>	
 				</div>				
 			{% endfor %}		
 		</div>
 	</div>	
-</div>	
-<div id=controles></div>
-<div id=presentacion></div>
+</div>
 
 
 

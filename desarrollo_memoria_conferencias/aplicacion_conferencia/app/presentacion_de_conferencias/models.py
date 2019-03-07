@@ -1,9 +1,11 @@
 from django.db import models
+from app.conferencias_campusd.models import Conferencia
 
 
 class Diapositiva(models.Model):
 	diapo = models.FileField(upload_to='ppt')
 	xml = models.FileField(upload_to='xml')
+	conferencia = models.OneToOneField('conferencias_campusd.Conferencia',on_delete=models.CASCADE)
 
 	def __unicode__(self):
 		return '{}'.format(self.diapo)

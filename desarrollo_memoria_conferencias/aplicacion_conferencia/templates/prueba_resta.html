@@ -3,45 +3,69 @@
 {% load staticfiles %} 
 
 {% block javascript %}
-	<script>
-		var video = document.getElementById("videoPlayer");
-		function playPause() { 
-		    if (video.paused) 
-		        video.play(); 
-		    else 
-		        video.pause(); 
-		}
-		function reload() { 
-		   video.load(); 
-		}
-		function makeLarge() { 
-		    video.width = 1000; 
-		}
-		function makeSmall() { 
-		    video.width = 250; 
-		} 
-		function makeNormal() { 
-		    video.width = 500; 
-		}
+<script>
+  var player;
+
+  function onYouTubeIframeAPIReady() {
+      player = new YT.Player('video-placeholder', {
+          width: 480,
+          height: 360,
+          videoId: 'Xa0Q0J5tOP0',
+          playerVars: {
+              color: 'white',
+              playlist: 'taJ60kskkns,FG0fTKAqZ5g'
+          },
+          events: {
+              onReady: initialize
+          }
+      });
+  }
+  function initialize(){
+
+    // Update the controls on load
+    updateTimerDisplay();
+    updateProgressBar();
+
+    // Clear any old interval.
+    clearInterval(time_update_interval);
+
+    // Start interval to update elapsed time display and
+    // the elapsed part of the progress bar every second.
+    time_update_interval = setInterval(function () {
+        updateTimerDisplay();
+        updateProgressBar();
+    }, 1000)
+
+  }
 
 
+  // This function is called by initialize()
+  function updateProgressBar(){
+      // Update the value of our progress bar accordingly.
+      $('#progress-bar').val((player.getCurrentTime() / player.getDuration()) * 100);
+  }
+  </script>
 
-	</script>
 {% endblock %}
 
 {% block content %}
 
 
-<div id="video" class="text-center">
-	<div class="overlay">
-		<div id="container">
-			{% for video in tiempo %}
-				<h3 class="titulo">{{video}}</h3>	
-			{% endfor %}
+<div id="presentacion">
 
-		</div>
-	</div>	
-</div>				
+    <div id="panel1">
+      <iframe id="player" type="text/html" width="480" height="360" src="http://www.youtube.com/embed/v4e49DUVI3o?enablejsapi=1" frameborder="0"></iframe>
+    </div>
+
+    <div id="panel2"> 
+
+      <div id="video-placeholder"></div>
+    </div>
+    
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+
+</div>			
 
 
 {% endblock %}

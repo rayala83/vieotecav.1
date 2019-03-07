@@ -8,13 +8,13 @@ from app.videos_de_conferencias.models import Video
 
 
 def sinc(request, num):
-	ppt = Diapositiva.objects.get(id=num)
-	conferencia = ppt.conferencia_set.all()
-	if conferencia.exists():
+	video = Video.objects.filter(conferencia_id=num)
+	ppt = Diapositiva.objects.filter(conferencia_id=num)
+	if ppt.exists():
 		slide = slides_ppt.objects.filter(id_diapo=ppt)
 		if slide.exists():
-			return render(request, 'sincronizar.html', {'conf' :conferencia, 'slide': slide})
-		return render(request, 'sincronizar.html', {'conf' :conferencia, 'slide': slide})
+			return render(request, 'sincronizar.html', {'conf' :video, 'slide': slide})
+		return render(request, 'sincronizar.html', {'conf' :video, 'slide': slide})
 	return redirect('app.conferencias_campusd.views.index')	
 
 
@@ -22,11 +22,11 @@ def sinc(request, num):
 
 
 def conferencias(request,num):
-    ppt = Diapositiva.objects.get(id=num)
-    conferencia = ppt.conferencia_set.all()
-    if conferencia.exists():
+    video = Video.objects.filter(conferencia_id=num)
+    ppt = Diapositiva.objects.filter(conferencia_id=num)
+    if ppt.exists():
         slide = slides_ppt.objects.filter(id_diapo=ppt)
         if slide.exists():
-    		return render(request, 'mis_conferencias.html', {'conf' :conferencia, 'slide': slide})
-    	return render(request, 'mis_conferencias.html', {'conf' :conferencia, 'slide': slide})
+    		return render(request, 'mis_conferencias.html', {'conf' :video, 'slide': slide})
+    	return render(request, 'mis_conferencias.html', {'conf' :video, 'slide': slide})
     return redirect('app.conferencias_campusd.views.index')	
