@@ -306,11 +306,12 @@ ol {
 }
 #panel3 {
     /*position:absolute; top: 25px; left: 530px; */
+    float:left;
     display:block;
     overflow:hidden;
     border-radius:5px; -moz-border-radius:5px; -webkit-border-radius: 5px;
     padding:2px 2px 16px 2px; 
-    width:380px; height:260px; 
+  
     /* 
     border:1px solid #548954; background:#355c33; color:#79af72;  
     -webkit-transform: perspective( 600 ) rotateY( -15deg );

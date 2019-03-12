@@ -1,5 +1,5 @@
 from django.contrib import admin
-from app.conferencias_campusd.models import Conferencia, Categoria, Tags, Sincronizacion, intervalo
+from app.conferencias_campusd.models import Conferencia, Categoria, Tags, intervalo
 
 # Register your models here.
 
@@ -16,9 +16,9 @@ admin.site.register(Categoria, categoriaAdmin)
 
 admin.site.register(Tags)
 
-admin.site.register(Sincronizacion)
+# admin.site.register(Sincronizacion)
 
 class intervaloAdmin(admin.ModelAdmin):
-	list_display = ('id_sinc', 'inicio', 'fin')
+	list_display = ('conferencia', 'inicio', 'fin')
 
 admin.site.register(intervalo, intervaloAdmin)

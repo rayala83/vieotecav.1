@@ -47,24 +47,24 @@ class Conferencia(models.Model):
 
 
 
-class Sincronizacion(models.Model):
-	conferencia = models.ForeignKey(Conferencia, on_delete=models.CASCADE)
+# class Sincronizacion(models.Model):
+# 	conferencia = models.OneToOneField(Conferencia, on_delete=models.CASCADE)
 
-	def __unicode__(self):
-		return self.conferencia
+# 	def __unicode__(self):
+# 		return self.conferencia
 
-	class Meta:
-		ordering = ["conferencia"]
-		verbose_name_plural = "Sincronizaciones"
+# 	class Meta:
+# 		ordering = ["conferencia"]
+# 		verbose_name_plural = "Sincronizaciones"
 
 
 class intervalo(models.Model):
-	id_sinc = models.ForeignKey(Sincronizacion, on_delete=models.CASCADE)
+	conferencia = models.OneToOneField(Conferencia,on_delete=models.CASCADE)
 	inicio = models.CharField(max_length=100)
 	fin = models.CharField(max_length=100)
 
 	def __unicode__(self):
-		return self.id_sinc
+		return self.conferencia
 
 	class Meta:
 		verbose_name_plural = "Intervalos"
