@@ -4,6 +4,7 @@
 
 {% block javascript %}
 <script >
+    
 
 	      // 2. This code loads the IFrame Player API code asynchronously.
       var tag = document.createElement('script');
@@ -28,7 +29,7 @@
       // 4. The API will call this function when the video player is ready.
       function onPlayerReady(event) {
         event.target.playVideo();
-        setTimeout('checkit()', 500);       
+        setTimeout('checkit()', 5000);       
 
       }
 
@@ -47,10 +48,34 @@
         //   findStartAndEnd(currentPosition);
         //   }
         document.getElementById("time").innerHTML = currentPosition;
+        
+        // if(tiempo <= currentPosition):
+        //   for (var i = 0; i < imagenes.length; i++) {
+        //      n += i;
+        //      findStartAndEnd(imagenes);
+        //   }        
+           
       
       }
-      
+     
+      function procesar(imagenes,inicio,fin,time)
+      {
+
+        tiempo_actual = time
+        for (var i = 0; i < imagenes.length; i++) { 
+          if(inicio[i] < tiempo_actual && tiempo_actual < fin[i]){
+              findStartAndEnd(imagenes[i])
+              console.log(i);
+              console.log(inicio[i]);
+              console.log(fin[i]);
+          }
+
+        }    
+      }
+
       function findStartAndEnd(currentSlideURL) {
+
+    //    var index=Math.floor((Math.random()*imagenes.length));
         $("#slide_image").attr('src',currentSlideURL);
       }
 
@@ -68,16 +93,17 @@
 
       function checkit() {
        
-        setTimeout('checkit()', 500);
+        setTimeout('checkit()', 5000);
 
         function updateTime() {
           var oldTime = videotime;
           if(player && player.getCurrentTime) {
             videotime = player.getCurrentTime();
             checkCorrectSlide(videotime);
+            procesar(imagenes,inicio, fin,videotime )
           }
         }
-        timeupdater = setInterval(updateTime, 100);
+        timeupdater = setInterval(updateTime, 5000);
       }
 
       
@@ -103,11 +129,31 @@
     <h3>Current Time: <span id="time"></span></h3>
     <img id="slide_image" style="height:100%;width:100%" src="">;  
 	</div>
+  
+  
+    <script>
+      var imagenes = new Array();
+      var inicio = new Array();
+      var fin = new Array();
+      i = 0
+      {% for item in items %}         
+        imagenes[i] = "{{ item.0 }}"
+        inicio[i] = "{{ item.1.0 }}"
+        fin[i] = "{{ item.1.1 }}"
+       
+        //var tiempo = new Array("{{ item.1.0 }}");
+        i = i+1
+      {% endfor %}
+      
+    
+    </script>
+ 
+
 
   <div id="panel3">
-    {% for imagen in slide %} 
+    {% for item in items %} 
       <ol>
-        <li><a href='javascript: ChangeCP("{{imagen.duracion}}")'>{{imagen.duracion}}<a></li>
+        <li><a href='javascript: ChangeCP("{{ item.1.0 }}")'>{{ item.1.0 }}<a></li>
       </ol>    
     {% endfor %}
   </div> 

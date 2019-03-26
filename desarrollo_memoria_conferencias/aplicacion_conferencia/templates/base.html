@@ -21,7 +21,13 @@
 	<meta http-equiv="Cache-Control" content="no-cache, mustrevalidate">
 	<meta http-equiv="Pragma" content="no-cache">
 
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 
+		<script type="text/javascript" src="{% static 'js/jquery.1.11.2.min.js' %}"></script>
+		<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+		<script type="text/javascript" src="{% static 'js/fotorama.js' %}"></script>
+		<script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+		{% block javascript %}{% endblock %}
 
 	</head>
 	<body>
@@ -34,13 +40,7 @@
 		<div class="body-footer">
 			{% block footer %}{% include 'footer.html' %}{% endblock %}
 		</div>
-		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-
-		<script type="text/javascript" src="{% static 'js/jquery.1.11.2.min.js' %}"></script>
-		<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
-		<script type="text/javascript" src="{% static 'js/fotorama.js' %}"></script>
-		<script type="text/javascript" src="{% static 'js/main.js' %}"></script>
-		{% block javascript %}{% endblock %}
+		
 
 			
 			
